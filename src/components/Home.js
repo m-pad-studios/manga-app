@@ -5,7 +5,7 @@ import "./App.css";
 import NewsBoard from "./NewsBoard";
 import LiveCommentFeed from "./LiveCommentFeed";
 import AddManga from "./AddManga";
-
+import  Gallery from "./Gallery";
 
 function checkUser() {
   Auth.currentAuthenticatedUser({
@@ -43,7 +43,7 @@ class Home extends React.Component {
                 <div class="col-2 col-sm-6">
                   <NewsBoard />
                   <AddManga />
-                  
+                  <Gallery />
                 </div>
              
                   <div class="col-2 col-sm-6">

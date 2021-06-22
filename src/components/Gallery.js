@@ -3,9 +3,7 @@ import { css } from "glamor";
 import { v4 as uuid } from "uuid";
 import Collapsible from "./Collapsible";
 import CollapseJoJo from "./CollapseJoJo";
-import { graphql } from 'react-apollo';
-import NewMyCustomTypeSubscription from '../subscriptions/NewGalleryCommentSubscription';
-import listMyCustomTypes from '../queries/ListGalleryComments';
+
 import CollapseOnePunchMan from "./CollapseOnePunchMan";
 
 
@@ -101,25 +99,4 @@ const styles = {
   }
 };
 
-export default graphql(listMyCustomTypes, {
-  options: {
-    fetchPolicy: 'cache-and-network'
-  },
-  props: props => ({
-    comments: props.data.listMyCustomTypes ? props.data.listMyCustomTypes.items : [],
-    subscribeToNewMyCustomTypes: params => {
-      props.data.subscribeToMore({
-        document: NewMyCustomTypeSubscription,
-        updateQuery: (prev, { subscriptionData: { data : { onCreateMyCustomType } } }) => {
-          return {
-            ...prev,
-            listMyCustomTypes: {
-              __typename: 'MyCustomTypesConnection',
-              items: [onCreateMyCustomType, ...prev.listMyCustomTypes.items.filter(gallerycomment => gallerycomment.id !== onCreateMyCustomType.id)]
-            }
-          }
-        }
-      })
-    }
-  })
-})(Gallery);
+export default Gallery;

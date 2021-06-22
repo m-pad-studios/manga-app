@@ -1,9 +1,7 @@
 import React from "react";
 import { css } from "glamor";
 import { v4 as uuid } from "uuid";
-import { graphql } from "react-apollo";
-import NewMangaSubscription from "../subscriptions/NewMangaSubscription";
-import ListMangas from "../queries/ListMangas";
+
 
 console.log(uuid);
 
@@ -20,9 +18,7 @@ class NewsBoard extends React.Component {
   togglePanel(e) {
     this.setState({ open: !this.state.open });
   }
-  componentDidMount() {
-    this.props.subscribeToNewMangas();
-  }
+
 
   render() {
     return (
@@ -65,40 +61,7 @@ class NewsBoard extends React.Component {
   }
 }
 
-export default graphql(ListMangas, {
-  options: {
-    fetchPolicy: "cache-and-network",
-  },
-  props: (props) => ({
-    mangas: props.data.listMangas ? props.data.listMangas.items : [],
-    subscribeToNewMangas: (params) => {
-      props.data.subscribeToMore({
-        document: NewMangaSubscription,
-        updateQuery: (
-          prev,
-          {
-            subscriptionData: {
-              data: { onCreateManga },
-            },
-          }
-        ) => {
-          return {
-            ...prev,
-            listMangas: {
-              __typename: "MangaConnection",
-              items: [
-                onCreateManga,
-                ...prev.listMangas.items.filter(
-                  (manga) => manga.id !== onCreateManga.id
-                ),
-              ],
-            },
-          };
-        },
-      });
-    },
-  }),
-})(NewsBoard);
+export default NewsBoard;
 
 const styles = {
   title: {

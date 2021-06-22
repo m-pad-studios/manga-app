@@ -1,9 +1,7 @@
 import React from "react";
 import { css } from "glamor";
 import { v4 as uuid } from "uuid";
-import { graphql } from "react-apollo";
-import CreateManga from "../mutations/CreateManga";
-import ListMangas from "../queries/ListMangas";
+
 
 console.log(uuid);
 
@@ -112,23 +110,7 @@ class AddManga extends React.Component {
   }
 }
 
-export default graphql(CreateManga, {
-  props: (props) => ({
-    onAdd: (manga) =>
-      props.mutate({
-        variables: manga,
-        optimisticResponse: {
-          __typename: "Mutation",
-          createManga: { ...manga, __typename: "Manga" },
-        },
-        update: (proxy, { data: { createManga } }) => {
-          const data = proxy.readQuery({ query: ListMangas });
-          data.listMangas.items.push(createManga);
-          proxy.writeQuery({ query: ListMangas, data });
-        },
-      }),
-  }),
-})(AddManga);
+export default AddManga;
 
 const styles = {
   button: {

@@ -3,9 +3,6 @@ import { css } from "glamor";
 import { v4 as uuid } from "uuid";
 
 import Grid from "@material-ui/core/Grid";
-import { graphql } from "react-apollo";
-import NewMyCustomTypeSubscription from "../subscriptions/NewGalleryCommentSubscription";
-import listMyCustomTypes from "../queries/ListGalleryComments";
 
 console.log(uuid);
 
@@ -14,9 +11,7 @@ var broly = require("../images/broly.jpeg");
 var dbz = require("../images/rsz_1dbz.png");
 
 class Collapsible extends React.Component {
-  componentDidMount() {
-    this.props.subscribeToNewMyCustomTypes();
-  }
+ 
   constructor(props) {
     super(props);
     this.state = {
@@ -127,40 +122,4 @@ const styles = {
   },
 };
 
-export default graphql(listMyCustomTypes, {
-  options: {
-    fetchPolicy: "cache-and-network",
-  },
-  props: (props) => ({
-    comments: props.data.listMyCustomTypes
-      ? props.data.listMyCustomTypes.items
-      : [],
-    subscribeToNewMyCustomTypes: (params) => {
-      props.data.subscribeToMore({
-        document: NewMyCustomTypeSubscription,
-        updateQuery: (
-          prev,
-          {
-            subscriptionData: {
-              data: { onCreateMyCustomType },
-            },
-          }
-        ) => {
-          return {
-            ...prev,
-            listMyCustomTypes: {
-              __typename: "MyCustomTypesConnection",
-              items: [
-                onCreateMyCustomType,
-                ...prev.listMyCustomTypes.items.filter(
-                  (gallerycomment) =>
-                    gallerycomment.id !== onCreateMyCustomType.id
-                ),
-              ],
-            },
-          };
-        },
-      });
-    },
-  }),
-})(Collapsible);
+export default Collapsible;

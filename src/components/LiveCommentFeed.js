@@ -1,15 +1,12 @@
 import React from "react";
 import { css } from "glamor";
 import { v4 as uuid } from "uuid";
-import { graphql } from "react-apollo";
-import NewMyCustomTypeSubscription from "../subscriptions/NewGalleryCommentSubscription";
-import listMyCustomTypes from "../queries/ListGalleryComments";
-import AddGalleryComment  from './AddGalleryComment';
+
 
 console.log(uuid);
 
-let date = new Date();
-let time = date.toLocaleTimeString();
+/* let date = new Date(); */
+/* let time = date.toLocaleTimeString(); */
 
 class LiveCommentFeed extends React.Component {
   constructor(props) {
@@ -24,10 +21,7 @@ class LiveCommentFeed extends React.Component {
   togglePanel(e) {
     this.setState({ open: !this.state.open });
   }
-  
-  componentDidMount() {
-    this.props.subscribeToNewMyCustomTypes();
-  }
+ 
 
   render() {
     return (
@@ -48,7 +42,7 @@ class LiveCommentFeed extends React.Component {
              </p>
            ))}
            <hr {...css(styles.breakLine)}></hr>
-           <AddGalleryComment />
+        
          </div>
         ) : null}
       </div>
@@ -56,43 +50,7 @@ class LiveCommentFeed extends React.Component {
   }
 }
 
-export default graphql(listMyCustomTypes, {
-    options: {
-      fetchPolicy: "cache-and-network",
-    },
-    props: (props) => ({
-      comments: props.data.listMyCustomTypes
-        ? props.data.listMyCustomTypes.items
-        : [],
-      subscribeToNewMyCustomTypes: (params) => {
-        props.data.subscribeToMore({
-          document: NewMyCustomTypeSubscription,
-          updateQuery: (
-            prev,
-            {
-              subscriptionData: {
-                data: { onCreateMyCustomType },
-              },
-            }
-          ) => {
-            return {
-              ...prev,
-              listMyCustomTypes: {
-                __typename: "MyCustomTypesConnection",
-                items: [
-                  onCreateMyCustomType,
-                  ...prev.listMyCustomTypes.items.filter(
-                    (gallerycomment) =>
-                      gallerycomment.id !== onCreateMyCustomType.id
-                  ),
-                ],
-              },
-            };
-          },
-        });
-      },
-    }),
-  })(LiveCommentFeed);
+export default LiveCommentFeed;
   
 
 const styles = {

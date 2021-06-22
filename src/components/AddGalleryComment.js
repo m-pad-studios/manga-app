@@ -1,29 +1,8 @@
 import React from "react";
 import { graphql } from "react-apollo";
 import { v4 as uuid } from "uuid";
-import CreateGalleryComment from "../mutations/CreateGalleryComment";
-import ListComments from "../queries/ListGalleryComments";
-import "./App.css";
-import { Auth } from "aws-amplify";
-
-let date = new Date();
 
 
-let users = Promise.resolve(
-  Auth.currentAuthenticatedUser({
-    bypassCache: true, // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-  }).then((user) => {
-    user = user.username;
-    console.log(user);
-    return user;
-  })
-);
-
-function u() {
-  users.then((value) => {
-    document.getElementById("user").value = value;
-  });
-}
 
 function reload() {
   window.location.reload();
@@ -44,15 +23,6 @@ function getTime() {
   document.getElementById("time").value = date;
 }
 
-function checkUser() {
-  Auth.currentAuthenticatedUser({
-    bypassCache: true, // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-  })
-    .then(
-      (user) => (document.getElementById("checkuser").innerHTML = user.username)
-    )
-    .catch((err) => console.log(err));
-}
 
 class AddGalleryComment extends React.Component {
   state = {
@@ -107,7 +77,7 @@ class AddGalleryComment extends React.Component {
         <br></br>
         <input
           id="user"
-          value={(this.state.user = u())}
+          value={(this.state.user )}
           className="white"
           onChange={(evt) => this.onChange("user", evt.target.value)}
           disabled="true"
@@ -115,7 +85,7 @@ class AddGalleryComment extends React.Component {
         />
         <input
           id="time"
-          value={(this.state.created = date)}
+          value={(this.state.created )}
           className="white"
           //onChange={(evt) => this.onChange("created", evt.target.value)}
           disabled="true"
@@ -128,7 +98,7 @@ class AddGalleryComment extends React.Component {
         <label
           id="checkuser"
           className="white"
-          value={checkUser()}
+          value=""
           hidden="true"
         ></label>
         <div id="warning" className="warning-tag"></div>
@@ -137,20 +107,4 @@ class AddGalleryComment extends React.Component {
   }
 }
 
-export default graphql(CreateGalleryComment, {
-  props: (props) => ({
-    onAdd: (comment) =>
-      props.mutate({
-        variables: comment,
-        optimisticResponse: {
-          __typename: "Mutation",
-          createMyCustomType: { ...comment, __typename: "MyCustomType" },
-        },
-        update: (proxy, { data: { createMyCustomType } }) => {
-          const data = proxy.readQuery({ query: ListComments });
-          data.ListComments.items.push(createMyCustomType);
-          proxy.writeQuery({ query: ListComments, data });
-        },
-      }),
-  }),
-})(AddGalleryComment);
+export default AddGalleryComment;
