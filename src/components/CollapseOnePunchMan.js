@@ -8,7 +8,7 @@ console.log(uuid);
 
 var imageName = require("../images/rsz_trunks.jpg");
 var broly = require("../images/broly.jpeg");
-var dbz = require("../images/rsz_1dbz.png");
+var dbz = require("../images/atom.png");
 
 class Collapsible extends React.Component {
  

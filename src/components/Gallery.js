@@ -13,7 +13,7 @@ console.log(uuid);
 class Gallery extends React.Component {
   render() {
     return (
-      <div {...css(styles.container)} className="stars">
+      <div className="stars">
   
         <div {...css(styles.gallery_greeting)}>
           <p>
@@ -79,24 +79,10 @@ const styles = {
     border: "1px solid white",
     textAlign: "center",
     color: "white",
-   marginLeft: 250,
+  
    marginBottom: 10,
   },
-  comments: {
-
-
-  },
-  liveComments: {
-    boxShadow: "2px 2px 5px rgba(0, 0, 0, .2)",
-    marginTop: 25,
-    backgroundColor: "#212529",
-    border: "1px solid white",
-    textAlign: "center",
-    color: "white",
-   marginLeft: 1150,
-   marginBottom: 10,
-   overflowWrap: 'anywhere',
-  }
+  
 };
 
 export default Gallery;

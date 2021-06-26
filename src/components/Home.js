@@ -1,21 +1,9 @@
 import React from "react";
-import { Auth } from "aws-amplify";
 import { css } from "glamor";
 import "./App.css";
-import NewsBoard from "./NewsBoard";
-import LiveCommentFeed from "./LiveCommentFeed";
-import AddManga from "./AddManga";
+
 import  Gallery from "./Gallery";
 
-function checkUser() {
-  Auth.currentAuthenticatedUser({
-    bypassCache: true, // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-  })
-    .then(
-      (user) => (document.getElementById("userinfo").innerHTML = user.username)
-    )
-    .catch((err) => console.log(err));
-}
 
 class Home extends React.Component {
  
@@ -27,29 +15,16 @@ class Home extends React.Component {
         <div class="row">
           <div class="col-sm-9">
             <div className="avatar-panel">
-              <label className="title" {...css(styles.header)}>
-                Welcome: <label id="userinfo">{checkUser()}</label>
-              </label>
+        
               <br></br>
               <div {...css(styles.gallery_greeting)}>
-          <p>
-            <h1>Home Page</h1>
-            This is the main page where you can customize your profile and check out any new content
-            <br></br>Click each label below to view the content!<br></br></p>
-          
+        
         </div>
               <hr></hr>
               <div class="row">
                 <div class="col-2 col-sm-6">
-                  <NewsBoard />
-                  <AddManga />
                   <Gallery />
                 </div>
-             
-                  <div class="col-2 col-sm-6">
-                  <LiveCommentFeed />
-                
-                  </div>
               </div>
               <br></br>
             </div>
